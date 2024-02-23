@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
 {
@@ -12,7 +13,14 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        // $products = Product::paginate(20);
+
+        $products = Cache::remember('products', 60, function(){
+            return Product::paginate(20);
+        });
+
+        return $products;
+
         return view('pages.products.index', compact('products'));
     }
 
@@ -40,6 +48,8 @@ class ProductController extends Controller
             'description' => $request->input('description'),
             'price' => $request->input('price'),
         ]);
+
+        Cache::forget('products'); // invalidate cache
 
         return redirect()->route('products.index')->with('success', 'Product created successfully');
     }
@@ -77,6 +87,8 @@ class ProductController extends Controller
             'price' => $request->input('price'),
         ]);
 
+        Cache::forget('products'); // invalidate cache
+
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
 
@@ -87,6 +99,9 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
+        
+        Cache::forget('products'); // invalidate cache
+
         return redirect()->route('products.index')->with('success', 'Product deleted successfully');
     }
 }

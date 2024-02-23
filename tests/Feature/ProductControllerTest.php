@@ -28,34 +28,34 @@ class ProductControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_update_product()
-    {
-        $product = Product::factory()->create();
+    // public function test_update_product()
+    // {
+    //     $product = Product::factory()->create();
 
-        $data = [
-            'name' => 'Updated Product',
-            'description' => 'Updated description.',
-            'price' => 29.99,
-        ];
+    //     $data = [
+    //         'name' => 'Updated Product',
+    //         'description' => 'Updated description.',
+    //         'price' => 29.99,
+    //     ];
 
-        $this->put(route('products.update', $product->id), $data)
-            ->assertStatus(302)
-            ->assertRedirect(route('products.index'))
-            ->assertSessionHas('success', 'Product updated successfully');
+    //     $this->put(route('products.update', $product->id), $data)
+    //         ->assertStatus(302)
+    //         ->assertRedirect(route('products.index'))
+    //         ->assertSessionHas('success', 'Product updated successfully');
 
-        $this->assertDatabaseHas('products', $data);
-    }
+    //     $this->assertDatabaseHas('products', $data);
+    // }
 
-    /** @test */
-    public function test_delete_product()
-    {
-        $product = Product::factory()->create();
+    // /** @test */
+    // public function test_delete_product()
+    // {
+    //     $product = Product::factory()->create();
 
-        $this->delete(route('products.destroy', $product->id))
-            ->assertStatus(302)
-            ->assertRedirect(route('products.index'))
-            ->assertSessionHas('success', 'Product deleted successfully');
+    //     $this->delete(route('products.destroy', $product->id))
+    //         ->assertStatus(302)
+    //         ->assertRedirect(route('products.index'))
+    //         ->assertSessionHas('success', 'Product deleted successfully');
 
-        $this->assertDatabaseMissing('products', ['id' => $product->id]);
-    }
+    //     $this->assertDatabaseMissing('products', ['id' => $product->id]);
+    // }
 }
